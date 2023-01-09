@@ -1,0 +1,18 @@
+#!/usr/bin/env bash
+
+npm i -D tailwindcss
+
+# Creating configuration files
+echo '/**@type {import('tailwindcss').Config}*/module.exports={content: ["./src/**/*.{html,js}"],theme:{extend:{},},plugins:[]};' > tailwind.config.js
+echo "@tailwind base; @tailwind components; @tailwind utilities; @tailwind variants;" > input.css
+echo '{"name":"tailwind","description":"tailwind project","main":"index.js","scripts":{"dev":"npx tailwindcss -i ./input.css -o ./src/style.css --watch & node ."}}' > package.json
+
+# Creating HTML file
+mkdir src
+echo '<!DOCTYPE html> <html> <head> <meta charset="utf-8"> <meta http-equiv="X-UA-Compatible" content="IE=edge"> <meta name="viewport" content="width=device-width, initial-scale=1.0"> <title>Tailwind CSS</title> <link rel="stylesheet" href="style.css" /> </head> <body> </body> </html>' > src/index.html
+
+# Creating dev server
+echo 'require("node:http").createServer(((e,t)=>{require("fs").readFile(__dirname+"/src"+e.url,((e,r)=>e?t.writeHead(404,{"Content-Type":"application/json"}).end(JSON.stringify(e)):t.writeHead(200,{"Content-Type":"text/html"}).end(r.toString("utf-8"))))})).listen(3e3);' > index.js
+
+# Running dev server
+npm run dev & xdg-open http://localhost:3000/index.html
